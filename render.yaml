@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: meerash-backend
+    env: docker
+    region: frankfurt
+    plan: free
+    dockerContext: ./fab_app/backend
+    dockerfilePath: ./fab_app/backend/Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PORT
+        value: 8000

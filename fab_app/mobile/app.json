@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "fab-app-mobile",
+    "slug": "fab-app-mobile",
+    "version": "1.0.0",
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
