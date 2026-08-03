@@ -29,6 +29,9 @@ def get_sqlite_engine(tenant_id: str):
         sqlite_engines[tenant_id] = engine
     return sqlite_engines[tenant_id]
 
+# Track which Postgres schemas have been initialized to avoid running DDL on every request
+initialized_pg_tenants = set()
+
 def get_db(request: Request = None):
     # Try to get tenant ID from headers
     tenant_id = "public"
@@ -38,17 +41,23 @@ def get_db(request: Request = None):
     if pg_engine:
         db = PgSessionLocal()
         try:
-            # Create schema if it doesn't exist
-            db.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{tenant_id}"'))
-            db.commit()
-            
-            # Set the search path to this tenant's schema
-            db.execute(text(f'SET search_path TO "{tenant_id}"'))
-            
-            # Ensure tables exist in this schema using the current connection
-            from backend.domain.models import Base
-            Base.metadata.create_all(db.connection())
-            
+            if tenant_id not in initialized_pg_tenants:
+                # Create schema if it doesn't exist
+                db.execute(text(f'CREATE SCHEMA IF NOT EXISTS "{tenant_id}"'))
+                db.commit()
+                
+                # Set the search path to this tenant's schema
+                db.execute(text(f'SET search_path TO "{tenant_id}"'))
+                
+                # Ensure tables exist in this schema using the current connection
+                from backend.domain.models import Base
+                Base.metadata.create_all(db.connection())
+                
+                initialized_pg_tenants.add(tenant_id)
+            else:
+                # Just set the search path for this request
+                db.execute(text(f'SET search_path TO "{tenant_id}"'))
+                
             yield db
         finally:
             db.close()
