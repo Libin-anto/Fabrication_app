@@ -4,14 +4,14 @@ from backend.api import worker_router, machine_router, assignment_router, search
 
 app = FastAPI(title="Meerash Fab App API")
 
-# Allow CORS for Vercel Frontend
+# Allow CORS for Vercel Frontend and Local Expo Dev
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173", 
-        "http://localhost:3000",
         "https://fabrication-app-chi.vercel.app",
-        "https://fabrication-87g7exd2g-teamthunder.vercel.app"
+        "http://localhost:8081",
+        "http://localhost:19006",
+        "http://192.168.137.1:8081"
     ],
     allow_credentials=True,
     allow_methods=["*"],
