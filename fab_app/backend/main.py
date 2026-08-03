@@ -10,7 +10,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173", 
         "http://localhost:3000",
-        "https://fabrication-app-chi.vercel.app"
+        "https://fabrication-app-chi.vercel.app",
+        "https://fabrication-87g7exd2g-teamthunder.vercel.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
