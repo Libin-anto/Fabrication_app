@@ -9,6 +9,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://fabrication-app-chi.vercel.app",
+        "https://fabrication-87g7exd2g-teamthunder.vercel.app",
         "http://localhost:8081",
         "http://localhost:19006",
         "http://192.168.137.1:8081"
