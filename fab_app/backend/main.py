@@ -12,8 +12,11 @@ app.add_middleware(
         "https://fabrication-87g7exd2g-teamthunder.vercel.app",
         "http://localhost:8081",
         "http://localhost:19006",
-        "http://192.168.137.1:8081"
+        "http://192.168.137.1:8081",
+        "http://localhost:5173", # Re-adding standard Vite local port just in case
+        "http://localhost:3000"
     ],
+    allow_origin_regex=r"https://fabrication-.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
