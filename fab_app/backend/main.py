@@ -7,7 +7,11 @@ app = FastAPI(title="Meerash Fab App API")
 # Allow CORS for Vercel Frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, you would replace "*" with your Vercel URL
+    allow_origins=[
+        "http://localhost:5173", 
+        "http://localhost:3000",
+        "https://fabrication-app-chi.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
