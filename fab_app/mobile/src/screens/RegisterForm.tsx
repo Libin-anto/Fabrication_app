@@ -203,7 +203,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   eyeIcon: {
-    padding: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   button: {
     backgroundColor: '#D98CA0',

@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EDE1D3',
     borderRadius: 14,
-    marginBottom: 20,
+    marginBottom: 16,
   },
   passwordInput: {
     flex: 1,
@@ -191,10 +191,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_400Regular',
     fontSize: 16,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
   eyeIcon: {
-    padding: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   button: {
     backgroundColor: '#D98CA0',
