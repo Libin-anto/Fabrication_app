@@ -31,3 +31,7 @@ app.include_router(dashboard_router.router)
 @app.get("/")
 def root():
     return {"message": "Welcome to Meerash API"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
