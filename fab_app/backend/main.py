@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.api import worker_router, machine_router, assignment_router, search_router, dashboard_router
+from backend.api import worker_router, machine_router, assignment_router, search_router, dashboard_router, auth_router
 
 app = FastAPI(title="Meerash Fab App API")
 
@@ -22,6 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth_router.router)
 app.include_router(worker_router.router)
 app.include_router(machine_router.router)
 app.include_router(assignment_router.router)

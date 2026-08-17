@@ -16,17 +16,43 @@ class AssignmentRepository:
         return assignment
 
     def find_current(self):
+        from sqlalchemy.orm import aliased
+        from backend.domain.models import Admin
+        
+        AssignedByAdmin = aliased(Admin)
+        
         return self.db.query(
-            Assignment, Worker.name.label("worker_name"), Machine.name.label("machine_name")
+            Assignment, 
+            Worker.name.label("worker_name"), 
+            Machine.name.label("machine_name"),
+            AssignedByAdmin.name.label("assigned_by_name_raw"),
+            AssignedByAdmin.username.label("assigned_by_username_raw"),
+            None, # returned_by_name_raw
+            None  # returned_by_username_raw
         ).join(Worker, Assignment.worker_id == Worker.id)\
          .join(Machine, Assignment.machine_id == Machine.id)\
+         .outerjoin(AssignedByAdmin, Assignment.assigned_by_admin_id == AssignedByAdmin.id)\
          .filter(Assignment.returned_at == None).all()
         
     def find_history(self):
+        from sqlalchemy.orm import aliased
+        from backend.domain.models import Admin
+        
+        AssignedByAdmin = aliased(Admin)
+        ReturnedByAdmin = aliased(Admin)
+        
         return self.db.query(
-            Assignment, Worker.name.label("worker_name"), Machine.name.label("machine_name")
+            Assignment, 
+            Worker.name.label("worker_name"), 
+            Machine.name.label("machine_name"),
+            AssignedByAdmin.name.label("assigned_by_name_raw"),
+            AssignedByAdmin.username.label("assigned_by_username_raw"),
+            ReturnedByAdmin.name.label("returned_by_name_raw"),
+            ReturnedByAdmin.username.label("returned_by_username_raw")
         ).join(Worker, Assignment.worker_id == Worker.id)\
          .join(Machine, Assignment.machine_id == Machine.id)\
+         .outerjoin(AssignedByAdmin, Assignment.assigned_by_admin_id == AssignedByAdmin.id)\
+         .outerjoin(ReturnedByAdmin, Assignment.returned_by_admin_id == ReturnedByAdmin.id)\
          .order_by(desc(Assignment.assigned_at)).all()
         
     def find_by_id(self, id: int):

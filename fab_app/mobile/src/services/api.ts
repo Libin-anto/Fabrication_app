@@ -7,15 +7,37 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add a request interceptor to inject the Tenant ID for multi-tenancy
+let authToken: string | null = null;
+export const setAuthToken = (token: string | null) => { authToken = token; };
+
 api.interceptors.request.use((config) => {
-  // In a real app, you would fetch this from AsyncStorage or state management
-  const tenantId = 'default_tenant'; 
-  config.headers['X-Tenant-ID'] = tenantId;
+  if (authToken) {
+    config.headers.Authorization = `Bearer ${authToken}`;
+  }
   return config;
 }, (error) => {
   return Promise.reject(error);
 });
+
+export const login = async (data: any) => {
+  const response = await api.post('/auth/login', data);
+  return response.data;
+};
+
+export const register = async (data: any) => {
+  const response = await api.post('/auth/register', data);
+  return response.data;
+};
+
+export const getMyProfile = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
+};
+
+export const updateMyProfile = async (data: any) => {
+  const response = await api.put('/auth/me', data);
+  return response.data;
+};
 
 export const getAvailableMachines = async () => {
   const response = await api.get('/machines/?status=Available');

@@ -9,6 +9,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { getDashboardStats } from '../services/api';
+import PressableScale from '../components/PressableScale';
+import { Feather } from '@expo/vector-icons';
 
 export default function Dashboard({ navigation }: any) {
   const [stats, setStats] = useState<any>(null);
@@ -32,9 +34,13 @@ export default function Dashboard({ navigation }: any) {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        
+      <View style={styles.header}>
         <Text style={styles.sectionHeader}>Facility Overview</Text>
+        <PressableScale style={styles.profileButton} onPress={() => navigation.navigate('Profile')}>
+          <Feather name="user" size={24} color="#8C7F72" />
+        </PressableScale>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         
         {loading || !stats ? (
           <View style={styles.statsLoadingContainer}>
@@ -80,13 +86,24 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 24,
+    paddingTop: 8,
     paddingBottom: 40,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 8,
+  },
+  profileButton: {
+    padding: 8,
   },
   sectionHeader: {
     fontFamily: 'Inter_700Bold',
     color: '#3A322B',
     fontSize: 24,
-    marginBottom: 16,
   },
   statsLoadingContainer: {
     paddingVertical: 40,

@@ -161,7 +161,12 @@ export default function Activity({ navigation }: any) {
         </TouchableOpacity>
       </View>
       <View style={styles.cardDetails}>
-        <Text style={styles.detailText}>Assigned: {formatDate(item.assigned_at)}</Text>
+        <View>
+          <Text style={styles.detailText}>Assigned: {formatDate(item.assigned_at)}</Text>
+          {item.assigned_by_name && (
+            <Text style={styles.attributionText}>Assigned by: {item.assigned_by_name}</Text>
+          )}
+        </View>
         <TouchableOpacity 
           style={styles.returnButton}
           onPress={() => handleReturn(item.id)}
@@ -182,13 +187,23 @@ export default function Activity({ navigation }: any) {
           <View key={histItem.id} style={[styles.historySubItem, index > 0 && styles.historySubItemBorder]}>
             <Text style={styles.machineNameHistory}>{histItem.machine_name}</Text>
             <View style={styles.timeBlockContainer}>
-              <View style={styles.timeBlock}>
-                <Text style={styles.timeLabel}>OUT:</Text>
-                <Text style={styles.detailText}>{formatDate(histItem.assigned_at)}</Text>
+              <View>
+                <View style={styles.timeBlock}>
+                  <Text style={styles.timeLabel}>OUT:</Text>
+                  <Text style={styles.detailText}>{formatDate(histItem.assigned_at)}</Text>
+                </View>
+                {histItem.assigned_by_name && (
+                  <Text style={styles.attributionText}>Assigned by: {histItem.assigned_by_name}</Text>
+                )}
               </View>
-              <View style={styles.timeBlock}>
-                <Text style={styles.timeLabel}>IN:</Text>
-                <Text style={styles.detailText}>{formatDate(histItem.returned_at)}</Text>
+              <View>
+                <View style={styles.timeBlock}>
+                  <Text style={styles.timeLabel}>IN:</Text>
+                  <Text style={styles.detailText}>{formatDate(histItem.returned_at)}</Text>
+                </View>
+                {histItem.returned_by_name && (
+                  <Text style={styles.attributionText}>Returned by: {histItem.returned_by_name}</Text>
+                )}
               </View>
             </View>
           </View>
@@ -408,10 +423,16 @@ const styles = StyleSheet.create({
     color: '#8C7F72',
     fontSize: 12,
   },
+  attributionText: {
+    fontFamily: 'Inter_400Regular',
+    color: '#D98CA0',
+    fontSize: 10,
+    marginTop: 2,
+  },
   timeBlock: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   timeLabel: {
     fontFamily: 'IBMPlexMono_400Regular',

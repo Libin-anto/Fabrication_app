@@ -4,6 +4,7 @@ alembic
 psycopg2-binary
 python-jose
 passlib
+bcrypt==3.2.2
 pydantic
 uvicorn
 gunicorn

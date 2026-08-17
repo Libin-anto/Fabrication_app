@@ -8,11 +8,20 @@ class AdminBase(BaseModel):
 class AdminCreate(AdminBase):
     password: str
 
+class AdminLogin(AdminBase):
+    password: str
+
 class AdminUpdate(AdminBase):
     password: Optional[str] = None
 
+class AdminProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+
 class AdminResponse(AdminBase):
     id: int
+    name: Optional[str] = None
+    role: Optional[str] = None
     class Config:
         from_attributes = True
 
@@ -136,3 +145,5 @@ class AssignmentResponse(AssignmentBase):
 class AssignmentDetailResponse(AssignmentResponse):
     worker_name: str
     machine_name: str
+    assigned_by_name: Optional[str] = None
+    returned_by_name: Optional[str] = None

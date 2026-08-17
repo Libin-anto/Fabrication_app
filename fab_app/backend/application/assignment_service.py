@@ -14,7 +14,7 @@ class AssignmentService:
         self.repo = AssignmentRepository(db)
         self.machine_service = MachineService(db)
 
-    def assign_machine(self, worker_id: int, machine_id: int, location: str = "On Site"):
+    def assign_machine(self, worker_id: int, machine_id: int, location: str = "On Site", admin_id: int = None):
         active_assignment = self.repo.find_active_by_worker(worker_id)
         if active_assignment:
             raise HTTPException(status_code=400, detail="Worker is already assigned to a machine and must return it first.")
@@ -29,7 +29,8 @@ class AssignmentService:
                 machine_id=machine_id,
                 assigned_at=datetime.utcnow(),
                 status="Assigned",
-                location=location
+                location=location,
+                assigned_by_admin_id=admin_id
             )
             created = self.repo.create(assignment)
             machine.status = "Assigned"
@@ -40,7 +41,7 @@ class AssignmentService:
             self.db.rollback()
             raise HTTPException(status_code=500, detail="Transaction failed: " + str(e))
 
-    def return_machine(self, assignment_id: int):
+    def return_machine(self, assignment_id: int, admin_id: int = None):
         assignment = self.repo.find_by_id(assignment_id)
         if not assignment:
             raise HTTPException(status_code=404, detail="Assignment not found")
@@ -52,6 +53,7 @@ class AssignmentService:
         try:
             assignment.returned_at = datetime.utcnow()
             assignment.status = "Returned"
+            assignment.returned_by_admin_id = admin_id
             machine.status = "Available"
             self.db.commit()
             self.db.refresh(assignment)
@@ -90,8 +92,18 @@ class AssignmentService:
     def _format_detail_results(self, results):
         formatted = []
         for row in results:
-            assignment_obj, worker_name, machine_name = row
-            # Create a dict to match AssignmentDetailResponse schema
+            # We now have 7 columns from the repo
+            assignment_obj = row[0]
+            worker_name = row[1]
+            machine_name = row[2]
+            assigned_by_name_raw = row[3]
+            assigned_by_username_raw = row[4]
+            returned_by_name_raw = row[5]
+            returned_by_username_raw = row[6]
+            
+            assigned_by = assigned_by_name_raw or assigned_by_username_raw
+            returned_by = returned_by_name_raw or returned_by_username_raw
+            
             data = {
                 "id": assignment_obj.id,
                 "worker_id": assignment_obj.worker_id,
@@ -101,7 +113,9 @@ class AssignmentService:
                 "status": assignment_obj.status,
                 "location": assignment_obj.location,
                 "worker_name": worker_name,
-                "machine_name": machine_name
+                "machine_name": machine_name,
+                "assigned_by_name": assigned_by,
+                "returned_by_name": returned_by
             }
             formatted.append(data)
         return formatted

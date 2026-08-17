@@ -11,6 +11,8 @@ class Admin(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    name = Column(String, nullable=True)
+    role = Column(String, nullable=True)
 
 class Floor(Base):
     __tablename__ = 'floors'
@@ -58,3 +60,5 @@ class Assignment(Base):
     returned_at = Column(DateTime, nullable=True)
     status = Column(String, nullable=False)
     location = Column(String, nullable=False, default="On Site")
+    assigned_by_admin_id = Column(Integer, ForeignKey('admins.id'), nullable=True)
+    returned_by_admin_id = Column(Integer, ForeignKey('admins.id'), nullable=True)

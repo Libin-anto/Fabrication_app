@@ -10,35 +10,38 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PressableScale from '../components/PressableScale';
-import { login, setAuthToken } from '../services/api';
+import { register } from '../services/api';
 
-export default function Login({ navigation }: any) {
+export default function RegisterForm({ navigation }: any) {
   const [adminId, setAdminId] = useState('');
-  const [accessCode, setAccessCode] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  const handleLogin = async () => {
-    if (!adminId || !accessCode) {
+  const handleRegister = async () => {
+    if (!adminId || !password) {
       setError('Please fill in both fields');
       return;
     }
-
+    
     setLoading(true);
     setError(null);
-
+    setSuccess(false);
+    
     try {
-      const response = await login({
+      await register({
         username: adminId,
-        password: accessCode
+        password: password
       });
       
-      const token = response.access_token;
-      setAuthToken(token);
+      setSuccess(true);
+      setTimeout(() => {
+        navigation.navigate('Login');
+      }, 1500);
       
-      navigation.navigate('Main');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid credentials');
+      setError(err.response?.data?.detail || 'Failed to create account');
     } finally {
       setLoading(false);
     }
@@ -52,22 +55,28 @@ export default function Login({ navigation }: any) {
       >
         <View style={styles.headerContainer}>
           <View style={styles.nameplate}>
-            <Text style={styles.nameplateText}>Fabrication Tool{'\n'}& Machine Management</Text>
+            <Text style={styles.nameplateText}>Create Admin Account</Text>
           </View>
         </View>
 
         <View style={styles.formPanel}>
-          <Text style={styles.formLabel}>Sign in</Text>
-
+          <Text style={styles.formLabel}>Register</Text>
+          
           {error && (
             <View style={styles.errorBanner}>
               <Text style={styles.errorText}>{error}</Text>
             </View>
           )}
 
+          {success && (
+            <View style={styles.successBanner}>
+              <Text style={styles.successText}>Account created! Returning to login...</Text>
+            </View>
+          )}
+
           <TextInput
             style={styles.input}
-            placeholder="Admin ID"
+            placeholder="User ID (Username)"
             placeholderTextColor="#8C7F72"
             value={adminId}
             onChangeText={setAdminId}
@@ -78,28 +87,28 @@ export default function Login({ navigation }: any) {
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="#8C7F72"
-            value={accessCode}
-            onChangeText={setAccessCode}
+            value={password}
+            onChangeText={setPassword}
             secureTextEntry
           />
 
           <PressableScale
             style={styles.button}
-            onPress={handleLogin}
-            disabled={loading}
+            onPress={handleRegister}
+            disabled={loading || success}
           >
             {loading ? (
               <ActivityIndicator color="#C25B6E" />
             ) : (
-              <Text style={styles.buttonText}>Enter System</Text>
+              <Text style={styles.buttonText}>Register</Text>
             )}
           </PressableScale>
 
           <PressableScale 
             style={styles.linkButton} 
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate('Login')}
           >
-            <Text style={styles.linkText}>Create an account</Text>
+            <Text style={styles.linkText}>Back to Sign in</Text>
           </PressableScale>
         </View>
 
@@ -210,6 +219,20 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#991B1B',
+    fontFamily: 'Inter_500Medium',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  successBanner: {
+    backgroundColor: '#D1FAE5',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#6EE7B7',
+  },
+  successText: {
+    color: '#065F46',
     fontFamily: 'Inter_500Medium',
     fontSize: 14,
     textAlign: 'center',

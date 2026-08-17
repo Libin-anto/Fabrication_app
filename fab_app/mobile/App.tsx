@@ -20,6 +20,9 @@ import AssignTool from './src/screens/AssignTool';
 import Activity from './src/screens/Activity';
 import SearchResults from './src/screens/SearchResults';
 
+import RegisterForm from './src/screens/RegisterForm';
+import ProfileForm from './src/screens/ProfileForm';
+
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createStackNavigator();
@@ -106,6 +109,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={RegisterForm} options={{ headerShown: false }} />
+        <Stack.Screen name="Profile" component={ProfileForm} options={{ headerShown: false }} />
         <Stack.Screen name="Main" component={TabNavigator} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

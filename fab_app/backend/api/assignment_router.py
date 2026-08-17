@@ -4,18 +4,20 @@ from typing import List
 from backend.api.schemas import AssignmentResponse, AssignmentDetailResponse, AssignmentCreate
 from backend.infrastructure.database import get_db
 from backend.application.assignment_service import AssignmentService
+from backend.api.auth_router import get_current_admin
+from backend.domain.models import Admin
 
 router = APIRouter(prefix="/assignments", tags=["assignments"])
 
 @router.post("/assign", response_model=AssignmentResponse)
-def create_assignment(data: AssignmentCreate, db: Session = Depends(get_db)):
+def create_assignment(data: AssignmentCreate, db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     svc = AssignmentService(db)
-    return svc.assign_machine(data.worker_id, data.machine_id, data.location)
+    return svc.assign_machine(data.worker_id, data.machine_id, data.location, admin_id=admin.id)
 
 @router.post("/{id}/return", response_model=AssignmentResponse)
-def return_assignment(id: int, db: Session = Depends(get_db)):
+def return_assignment(id: int, db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     svc = AssignmentService(db)
-    return svc.return_machine(id)
+    return svc.return_machine(id, admin_id=admin.id)
 
 from pydantic import BaseModel
 class LocationUpdate(BaseModel):
