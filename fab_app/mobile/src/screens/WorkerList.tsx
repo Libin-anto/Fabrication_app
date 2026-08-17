@@ -12,10 +12,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { getWorkers, deleteWorker, getCurrentAssignments } from '../services/api';
 import SearchBar from '../components/SearchBar';
+import { useExitAppOnBack } from '../hooks/useExitAppOnBack';
 
 export default function WorkerList({ navigation }: any) {
   const [workers, setWorkers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useExitAppOnBack();
   const [error, setError] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 

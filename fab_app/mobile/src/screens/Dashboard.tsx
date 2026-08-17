@@ -11,10 +11,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getDashboardStats } from '../services/api';
 import PressableScale from '../components/PressableScale';
 import { Feather } from '@expo/vector-icons';
+import { useExitAppOnBack } from '../hooks/useExitAppOnBack';
 
 export default function Dashboard({ navigation }: any) {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+
+  useExitAppOnBack();
 
   useFocusEffect(
     useCallback(() => {

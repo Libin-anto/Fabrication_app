@@ -11,11 +11,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { getWorkers, getAvailableMachines, assignMachine, getCurrentAssignments } from '../services/api';
 import PressableScale from '../components/PressableScale';
+import { useExitAppOnBack } from '../hooks/useExitAppOnBack';
 
 export default function AssignTool({ navigation }: any) {
   const [selectedWorker, setSelectedWorker] = useState<number | null>(null);
   const [selectedMachine, setSelectedMachine] = useState<number | null>(null);
   const [location, setLocation] = useState<string>('On Site');
+
+  useExitAppOnBack();
   
   const [workers, setWorkers] = useState<any[]>([]);
   const [machines, setMachines] = useState<any[]>([]);

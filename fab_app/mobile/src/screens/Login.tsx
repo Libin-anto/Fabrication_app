@@ -11,12 +11,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PressableScale from '../components/PressableScale';
 import { login, setAuthToken } from '../services/api';
+import { Feather } from '@expo/vector-icons';
 
 export default function Login({ navigation }: any) {
   const [adminId, setAdminId] = useState('');
   const [accessCode, setAccessCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     if (!adminId || !accessCode) {
@@ -74,14 +76,19 @@ export default function Login({ navigation }: any) {
             autoCapitalize="none"
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#8C7F72"
-            value={accessCode}
-            onChangeText={setAccessCode}
-            secureTextEntry
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              placeholderTextColor="#8C7F72"
+              value={accessCode}
+              onChangeText={setAccessCode}
+              secureTextEntry={!showPassword}
+            />
+            <PressableScale onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+              <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#8C7F72" />
+            </PressableScale>
+          </View>
 
           <PressableScale
             style={styles.button}
@@ -168,6 +175,26 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 16,
     borderRadius: 14,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F7F0E7',
+    borderWidth: 1,
+    borderColor: '#EDE1D3',
+    borderRadius: 14,
+    marginBottom: 20,
+  },
+  passwordInput: {
+    flex: 1,
+    color: '#3A322B',
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  eyeIcon: {
+    padding: 14,
   },
   button: {
     backgroundColor: '#D98CA0',

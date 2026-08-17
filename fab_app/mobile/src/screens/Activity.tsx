@@ -14,10 +14,13 @@ import { Feather } from '@expo/vector-icons';
 import { getCurrentAssignments, returnAssignment, updateAssignmentLocation, getAssignmentHistory } from '../services/api';
 import { formatDate } from '../services/formatDate';
 import SearchBar from '../components/SearchBar';
+import { useExitAppOnBack } from '../hooks/useExitAppOnBack';
 
 export default function Activity({ navigation }: any) {
   const [activeTab, setActiveTab] = useState<'current' | 'history'>('current');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useExitAppOnBack();
   const [currentAssignments, setCurrentAssignments] = useState<any[]>([]);
   const [history, setHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

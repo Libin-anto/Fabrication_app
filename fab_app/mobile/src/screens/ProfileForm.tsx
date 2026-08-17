@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PressableScale from '../components/PressableScale';
-import { getMyProfile, updateMyProfile } from '../services/api';
+import { getMyProfile, updateMyProfile, setAuthToken } from '../services/api';
+import { Feather } from '@expo/vector-icons';
 
 export default function ProfileForm({ navigation }: any) {
   const [name, setName] = useState('');
@@ -56,6 +57,14 @@ export default function ProfileForm({ navigation }: any) {
     }
   };
 
+  const handleLogout = () => {
+    setAuthToken(null);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -63,6 +72,9 @@ export default function ProfileForm({ navigation }: any) {
           <Text style={styles.backText}>← Back</Text>
         </PressableScale>
         <Text style={styles.headerTitle}>My Profile</Text>
+        <PressableScale onPress={handleLogout} style={styles.logoutButton}>
+          <Feather name="log-out" size={20} color="#B94A4A" />
+        </PressableScale>
       </View>
 
       <KeyboardAvoidingView
@@ -147,6 +159,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter_700Bold',
     fontSize: 20,
     color: '#3A322B',
+    flex: 1,
+    textAlign: 'center',
+  },
+  logoutButton: {
+    padding: 8,
+    marginLeft: 16,
   },
   keyboardView: { flex: 1, paddingHorizontal: 24, paddingTop: 32 },
   formPanel: { backgroundColor: '#FFFCF8', padding: 24, borderWidth: 1, borderColor: '#EDE1D3', borderRadius: 14, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.08, shadowRadius: 5, elevation: 8 },

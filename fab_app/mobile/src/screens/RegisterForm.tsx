@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import PressableScale from '../components/PressableScale';
 import { register } from '../services/api';
+import { Feather } from '@expo/vector-icons';
 
 export default function RegisterForm({ navigation }: any) {
   const [adminId, setAdminId] = useState('');
@@ -18,6 +19,7 @@ export default function RegisterForm({ navigation }: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async () => {
     if (!adminId || !password) {
@@ -83,14 +85,19 @@ export default function RegisterForm({ navigation }: any) {
             autoCapitalize="none"
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#8C7F72"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              placeholderTextColor="#8C7F72"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+            />
+            <PressableScale onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+              <Feather name={showPassword ? "eye" : "eye-off"} size={20} color="#8C7F72" />
+            </PressableScale>
+          </View>
 
           <PressableScale
             style={styles.button}
@@ -177,6 +184,26 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 16,
     borderRadius: 14,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F7F0E7',
+    borderWidth: 1,
+    borderColor: '#EDE1D3',
+    borderRadius: 14,
+    marginBottom: 16,
+  },
+  passwordInput: {
+    flex: 1,
+    color: '#3A322B',
+    fontFamily: 'Inter_400Regular',
+    fontSize: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  eyeIcon: {
+    padding: 12,
   },
   button: {
     backgroundColor: '#D98CA0',
