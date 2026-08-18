@@ -3,17 +3,18 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from typing import List
 from backend.infrastructure.database import get_db
-from backend.domain.models import Worker, Machine
+from backend.domain.models import Worker, Machine, Admin
+from backend.api.auth_router import get_current_admin
 
 router = APIRouter(prefix="/search", tags=["search"])
 
 @router.get("/")
-def search(q: str = "", db: Session = Depends(get_db)):
+def search(q: str = "", db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     if not q:
         return []
-        
+
     term = f"%{q}%"
-    
+
     # Search active workers
     workers = db.query(Worker).filter(
         Worker.is_active == True,
@@ -22,7 +23,7 @@ def search(q: str = "", db: Session = Depends(get_db)):
             Worker.worker_id.ilike(term)
         )
     ).all()
-    
+
     # Search active machines
     machines = db.query(Machine).filter(
         Machine.is_active == True,
@@ -31,9 +32,9 @@ def search(q: str = "", db: Session = Depends(get_db)):
             Machine.machine_id.ilike(term)
         )
     ).all()
-    
+
     results = []
-    
+
     for w in workers:
         results.append({
             "type": "worker",
@@ -42,7 +43,7 @@ def search(q: str = "", db: Session = Depends(get_db)):
             "name": w.name,
             "role": w.role
         })
-        
+
     for m in machines:
         results.append({
             "type": "machine",
@@ -52,5 +53,5 @@ def search(q: str = "", db: Session = Depends(get_db)):
             "status": m.status,
             "category": m.category
         })
-        
+
     return results

@@ -53,6 +53,7 @@ class AssignmentRepository:
          .join(Machine, Assignment.machine_id == Machine.id)\
          .outerjoin(AssignedByAdmin, Assignment.assigned_by_admin_id == AssignedByAdmin.id)\
          .outerjoin(ReturnedByAdmin, Assignment.returned_by_admin_id == ReturnedByAdmin.id)\
+         .filter(Assignment.returned_at != None)\
          .order_by(desc(Assignment.assigned_at)).all()
         
     def find_by_id(self, id: int):

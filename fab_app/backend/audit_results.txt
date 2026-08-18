@@ -1,165 +1,88 @@
 === WORKERS ===
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/workers/
-RESPONSE: 200
-BODY: [{"name":"Test Worker","worker_id":"TW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":7},{"name":"Assign Worker","worker_id":"AW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":8},{"name":"Worker 3","worker_id":"W3-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":9}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/workers/
-BODY: {"name": "Test Worker", "worker_id": "TW-1785309248", "role": "Fabricator", "box_id": 1, "is_active": true}
-RESPONSE: 201
-BODY: {"name":"Test Worker","worker_id":"TW-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":10}
---------------------------------------------------
-REQUEST: GET http://127.0.0.1:8000/workers/10
-RESPONSE: 200
-BODY: {"name":"Test Worker","worker_id":"TW-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":10}
---------------------------------------------------
-REQUEST: POST http://127.0.0.1:8000/workers/
-BODY: {"name": "Duplicate Worker", "worker_id": "TW-1785309248", "role": "Helper", "box_id": 1, "is_active": true}
-RESPONSE: 400
-BODY: {"detail":"Worker ID TW-1785309248 is already in use."}
---------------------------------------------------
-REQUEST: POST http://127.0.0.1:8000/workers/
-BODY: {"name": "", "worker_id": "TW2-1785309248", "role": "Helper", "box_id": 1, "is_active": true}
-RESPONSE: 400
-BODY: {"detail":"Name cannot be empty."}
---------------------------------------------------
-REQUEST: PUT http://127.0.0.1:8000/workers/10
-BODY: {"name": "Updated Worker", "worker_id": "TW-1785309248", "role": "Fabricator", "box_id": 1, "is_active": true}
-RESPONSE: 200
-BODY: {"name":"Updated Worker","worker_id":"TW-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":10}
---------------------------------------------------
-REQUEST: DELETE http://127.0.0.1:8000/workers/10
-RESPONSE: 200
-BODY: {"message":"Worker deactivated"}
---------------------------------------------------
-REQUEST: GET http://127.0.0.1:8000/workers/
-RESPONSE: 200
-BODY: [{"name":"Test Worker","worker_id":"TW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":7},{"name":"Assign Worker","worker_id":"AW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":8},{"name":"Worker 3","worker_id":"W3-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":9}]
+BODY: {"name": "Test Worker", "worker_id": "TW-1787037472", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 
 === MACHINES ===
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/machines/
-RESPONSE: 200
-BODY: [{"machine_id":"TM-1785309200","machine_number":"SN-1785309200","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":6},{"machine_id":"AM-1785309200","machine_number":"SNA-1785309200","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":7}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/machines/
-BODY: {"name": "Test Machine", "machine_id": "TM-1785309248", "machine_number": "SN-1785309248", "category": "Drill", "status": "Available", "is_active": true}
-RESPONSE: 201
-BODY: {"machine_id":"TM-1785309248","machine_number":"SN-1785309248","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":8}
---------------------------------------------------
-REQUEST: GET http://127.0.0.1:8000/machines/8
-RESPONSE: 200
-BODY: {"machine_id":"TM-1785309248","machine_number":"SN-1785309248","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":8}
---------------------------------------------------
-REQUEST: POST http://127.0.0.1:8000/machines/
-BODY: {"name": "Dup Machine", "machine_id": "TM-1785309248", "machine_number": "SN-17853092482", "category": "Drill", "status": "Available", "is_active": true}
-RESPONSE: 400
-BODY: {"detail":"Machine ID TM-1785309248 is already in use."}
---------------------------------------------------
-REQUEST: POST http://127.0.0.1:8000/machines/
-BODY: {"name": "", "machine_id": "TM2-1785309248", "machine_number": "SN-17853092483", "category": "Drill", "status": "Available", "is_active": true}
-RESPONSE: 400
-BODY: {"detail":"Name cannot be empty."}
---------------------------------------------------
-REQUEST: PUT http://127.0.0.1:8000/machines/8
-BODY: {"name": "Updated Machine", "machine_id": "TM-1785309248", "machine_number": "SN-1785309248", "category": "Saw", "status": "Available", "is_active": true}
-RESPONSE: 200
-BODY: {"machine_id":"TM-1785309248","machine_number":"SN-1785309248","name":"Updated Machine","category":"Saw","status":"Available","remarks":null,"is_active":true,"id":8}
---------------------------------------------------
-REQUEST: DELETE http://127.0.0.1:8000/machines/8
-RESPONSE: 200
-BODY: {"message":"Machine deactivated"}
---------------------------------------------------
-REQUEST: GET http://127.0.0.1:8000/machines/
-RESPONSE: 200
-BODY: [{"machine_id":"TM-1785309200","machine_number":"SN-1785309200","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":6},{"machine_id":"AM-1785309200","machine_number":"SNA-1785309200","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":7}]
+BODY: {"name": "Test Machine", "machine_id": "TM-1787037472", "machine_number": "SN-1787037472", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 
 === ASSIGNMENTS ===
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/workers/
-BODY: {"name": "Assign Worker", "worker_id": "AW-1785309248", "role": "Fabricator", "box_id": 1, "is_active": true}
-RESPONSE: 201
-BODY: {"name":"Assign Worker","worker_id":"AW-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":11}
+BODY: {"name": "Assign Worker", "worker_id": "AW-1787037472", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/machines/
-BODY: {"name": "Assign Machine", "machine_id": "AM-1785309248", "machine_number": "SNA-1785309248", "category": "Drill", "status": "Available", "is_active": true}
-RESPONSE: 201
-BODY: {"machine_id":"AM-1785309248","machine_number":"SNA-1785309248","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":9}
+BODY: {"name": "Assign Machine", "machine_id": "AM-1787037472", "machine_number": "SNA-1787037472", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/assignments/assign
-BODY: {"worker_id": 11, "machine_id": 9, "location": "On Site"}
-RESPONSE: 200
-BODY: {"worker_id":11,"machine_id":9,"assigned_at":"2026-07-29T07:14:08.730048","status":"Assigned","location":"On Site","id":12,"returned_at":null}
+BODY: {"worker_id": null, "machine_id": null, "location": "On Site"}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/workers/
-BODY: {"name": "Worker 3", "worker_id": "W3-1785309248", "role": "Fabricator", "box_id": 1, "is_active": true}
-RESPONSE: 201
-BODY: {"name":"Worker 3","worker_id":"W3-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":12}
+BODY: {"name": "Worker 3", "worker_id": "W3-1787037472", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: POST http://127.0.0.1:8000/assignments/assign
-BODY: {"worker_id": 12, "machine_id": 9, "location": "On Site"}
-RESPONSE: 400
-BODY: {"detail":"Machine is currently Assigned and cannot be assigned."}
+BODY: {"worker_id": null, "machine_id": null, "location": "On Site"}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/assignments/current
-RESPONSE: 200
-BODY: [{"worker_id":11,"machine_id":9,"assigned_at":"2026-07-29T07:14:08.730048","status":"Assigned","location":"On Site","id":12,"returned_at":null,"worker_name":"Assign Worker","machine_name":"Assign Machine"}]
---------------------------------------------------
-REQUEST: PATCH http://127.0.0.1:8000/assignments/12/location
-BODY: {"location": "With Worker"}
-RESPONSE: 200
-BODY: {"worker_id":11,"machine_id":9,"assigned_at":"2026-07-29T07:14:08.730048","status":"Assigned","location":"With Worker","id":12,"returned_at":null}
---------------------------------------------------
-REQUEST: PATCH http://127.0.0.1:8000/assignments/12/location
-BODY: {"location": "Invalid Location"}
-RESPONSE: 400
-BODY: {"detail":"Location must be 'On Site' or 'With Worker'"}
---------------------------------------------------
-REQUEST: POST http://127.0.0.1:8000/assignments/12/return
-RESPONSE: 200
-BODY: {"worker_id":11,"machine_id":9,"assigned_at":"2026-07-29T07:14:08.730048","status":"Returned","location":"With Worker","id":12,"returned_at":"2026-07-29T07:14:08.780970"}
---------------------------------------------------
-REQUEST: PATCH http://127.0.0.1:8000/assignments/12/location
-BODY: {"location": "On Site"}
-RESPONSE: 400
-BODY: {"detail":"Cannot update location of returned assignment"}
---------------------------------------------------
-REQUEST: GET http://127.0.0.1:8000/assignments/history
-RESPONSE: 200
-BODY: [{"worker_id":11,"machine_id":9,"assigned_at":"2026-07-29T07:14:08.730048","status":"Returned","location":"With Worker","id":12,"returned_at":"2026-07-29T07:14:08.780970","worker_name":"Assign Worker","machine_name":"Assign Machine"},{"worker_id":8,"machine_id":7,"assigned_at":"2026-07-29T07:13:20.473157","status":"Returned","location":"With Worker","id":11,"returned_at":"2026-07-29T07:13:20.543349","worker_name":"Assign Worker","machine_name":"Assign Machine"},{"worker_id":6,"machine_id":5,"assigned_at":"2026-07-28T09:14:44.820722","status":"Returned","location":"With Worker","id":10,"returned_at":"2026-07-28T10:54:23.010177","worker_name":"Anto","machine_name":"Fabricator"},{"worker_id":5,"machine_id":4,"assigned_at":"2026-07-28T08:40:36.851524","status":"Returned","location":"With Worker","id":9,"returned_at":"2026-07-28T08:40:42.155456","worker_name":"Libin","machine_name":"Drill"},{"worker_id":5,"machine_id":4,"assigned_at":"2026-07-28T08:40:13.350687","status":"Returned","location":"On Site","id":8,"returned_at":"2026-07-28T08:40:21.826430","worker_name":"Libin","machine_name":"Drill"},{"worker_id":5,"machine_id":4,"assigned_at":"2026-07-28T08:39:46.886729","status":"Returned","location":"With Worker","id":7,"returned_at":"2026-07-28T08:40:00.030750","worker_name":"Libin","machine_name":"Drill"},{"worker_id":3,"machine_id":2,"assigned_at":"2026-07-24T08:37:43.405916","status":"Returned","location":"On Site","id":6,"returned_at":"2026-07-28T08:40:01.055954","worker_name":"Kumar","machine_name":"Drill 1"},{"worker_id":3,"machine_id":1,"assigned_at":"2026-07-24T06:03:53.226821","status":"Returned","location":"On Site","id":5,"returned_at":"2026-07-28T08:40:22.972612","worker_name":"Kumar","machine_name":"Welder 1"},{"worker_id":3,"machine_id":2,"assigned_at":"2026-07-24T05:35:20.075308","status":"Returned","location":"On Site","id":4,"returned_at":"2026-07-28T08:40:23.406429","worker_name":"Kumar","machine_name":"Drill 1"},{"worker_id":1,"machine_id":3,"assigned_at":"2026-07-24T05:35:15.185118","status":"Returned","location":"On Site","id":3,"returned_at":"2026-07-28T08:40:23.793366","worker_name":"Alice Worker","machine_name":"Drill 1"},{"worker_id":3,"machine_id":1,"assigned_at":"2026-07-24T05:35:06.729148","status":"Returned","location":"On Site","id":2,"returned_at":"2026-07-24T06:03:47.390484","worker_name":"Kumar","machine_name":"Welder 1"},{"worker_id":1,"machine_id":1,"assigned_at":"2026-07-21T16:07:00.723249","status":"Returned","location":"On Site","id":1,"returned_at":"2026-07-21T16:08:25.025937","worker_name":"Alice Worker","machine_name":"Welder 1"}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 
 === DASHBOARD ===
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/dashboard/stats
-RESPONSE: 200
-BODY: {"total_workers":5,"total_machines":3,"available":3,"assigned":0,"under_repair":0}
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/workers/
-RESPONSE: 200
-BODY: [{"name":"Test Worker","worker_id":"TW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":7},{"name":"Assign Worker","worker_id":"AW-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":8},{"name":"Worker 3","worker_id":"W3-1785309200","role":"Fabricator","is_active":true,"box_id":1,"id":9},{"name":"Assign Worker","worker_id":"AW-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":11},{"name":"Worker 3","worker_id":"W3-1785309248","role":"Fabricator","is_active":true,"box_id":1,"id":12}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/machines/?status=Available
-RESPONSE: 200
-BODY: [{"machine_id":"TM-1785309200","machine_number":"SN-1785309200","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":6},{"machine_id":"AM-1785309200","machine_number":"SNA-1785309200","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":7},{"machine_id":"AM-1785309248","machine_number":"SNA-1785309248","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":9}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/machines/?status=Assigned
-RESPONSE: 200
-BODY: []
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/machines/?status=Under%20Repair
-RESPONSE: 200
-BODY: []
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 
 === SEARCH ===
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/search/?q=Assign
-RESPONSE: 200
-BODY: [{"type":"worker","id":8,"display_id":"AW-1785309200","name":"Assign Worker","role":"Fabricator"},{"type":"worker","id":11,"display_id":"AW-1785309248","name":"Assign Worker","role":"Fabricator"},{"type":"machine","id":7,"display_id":"AM-1785309200","name":"Assign Machine","status":"Available","category":"Drill"},{"type":"machine","id":9,"display_id":"AM-1785309248","name":"Assign Machine","status":"Available","category":"Drill"}]
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/search/?q=AM-001
-RESPONSE: 200
-BODY: []
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}
 --------------------------------------------------
 REQUEST: GET http://127.0.0.1:8000/search/?q=xyz123nonsense
-RESPONSE: 200
-BODY: []
+RESPONSE: 401
+BODY: {"detail":"Not authenticated"}

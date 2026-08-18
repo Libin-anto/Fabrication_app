@@ -1,11 +1,20 @@
 import os
+import sys
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from jose import jwt, JWTError
 from fastapi import HTTPException, status
 
-# Load SECRET_KEY from environment, with a fallback that we will instruct the user to replace in production
-SECRET_KEY = os.getenv("SECRET_KEY", "temporary-insecure-dev-key-change-this-in-render")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    print(
+        "\n[FATAL] SECRET_KEY environment variable is not set.\n"
+        "The backend cannot start without a secret key for JWT signing.\n"
+        "Generate a strong random key and set it in Render environment variables.\n",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 

@@ -1,18 +1,19 @@
-from pydantic import BaseModel
-from typing import Optional, Union
+from pydantic import BaseModel, field_validator
+from typing import Optional, Literal
 from datetime import datetime
+
+# ─── Auth ────────────────────────────────────────────────────────────────────
 
 class AdminBase(BaseModel):
     username: str
 
 class AdminCreate(AdminBase):
     password: str
+    admin_key: str  # Required — validated server-side against ADMIN_REGISTRATION_KEY env var
+    name: Optional[str] = None
 
 class AdminLogin(AdminBase):
     password: str
-
-class AdminUpdate(AdminBase):
-    password: Optional[str] = None
 
 class AdminProfileUpdate(BaseModel):
     name: Optional[str] = None
@@ -24,6 +25,8 @@ class AdminResponse(AdminBase):
     role: Optional[str] = None
     class Config:
         from_attributes = True
+
+# ─── Floors ──────────────────────────────────────────────────────────────────
 
 class FloorBase(BaseModel):
     name: str
@@ -38,6 +41,8 @@ class FloorResponse(FloorBase):
     id: int
     class Config:
         from_attributes = True
+
+# ─── Mestris ─────────────────────────────────────────────────────────────────
 
 class MestriBase(BaseModel):
     name: str
@@ -54,6 +59,8 @@ class MestriResponse(MestriBase):
     class Config:
         from_attributes = True
 
+# ─── Boxes ───────────────────────────────────────────────────────────────────
+
 class BoxBase(BaseModel):
     name: str
     mestri_id: int
@@ -68,6 +75,8 @@ class BoxResponse(BoxBase):
     id: int
     class Config:
         from_attributes = True
+
+# ─── Workers ─────────────────────────────────────────────────────────────────
 
 class WorkerBase(BaseModel):
     name: str
@@ -91,12 +100,17 @@ class WorkerResponse(WorkerBase):
     class Config:
         from_attributes = True
 
+# ─── Machines ────────────────────────────────────────────────────────────────
+
+# Strict enum for machine status — no arbitrary strings accepted
+MachineStatusLiteral = Literal["Available", "Assigned", "Under Repair"]
+
 class MachineBase(BaseModel):
     machine_id: str
     machine_number: str
     name: str
     category: Optional[str] = None
-    status: str  # Available | Assigned | Under Repair
+    status: MachineStatusLiteral
     remarks: Optional[str] = None
     is_active: bool
 
@@ -108,17 +122,19 @@ class MachineUpdate(MachineBase):
     machine_number: Optional[str] = None
     name: Optional[str] = None
     category: Optional[str] = None
-    status: Optional[str] = None
+    status: Optional[MachineStatusLiteral] = None
     remarks: Optional[str] = None
     is_active: Optional[bool] = None
 
 class MachineStatusUpdate(BaseModel):
-    status: str
+    status: MachineStatusLiteral  # Strict — only "Available", "Assigned", "Under Repair"
 
 class MachineResponse(MachineBase):
     id: int
     class Config:
         from_attributes = True
+
+# ─── Assignments ─────────────────────────────────────────────────────────────
 
 class AssignmentBase(BaseModel):
     worker_id: int

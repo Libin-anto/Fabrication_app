@@ -52,8 +52,8 @@ print(f"Status: {status}\nResponse: {json.dumps(response, indent=2)}\n")
 
 print("=== 6. POST /assignments/assign ===")
 # Fetch available worker and machine
-_, workers = make_request("GET", "/workers/")
-_, machines = make_request("GET", "/machines/?status=Available")
+_, workers = make_request("GET", "/workers/", token=token)
+_, machines = make_request("GET", "/machines/?status=Available", token=token)
 
 if not workers:
     print("Seeding a worker directly via DB since API endpoint might not exist...")
@@ -98,7 +98,7 @@ print(f"Status: {status}\nResponse: {json.dumps(assign_response, indent=2)}\n")
 assignment_id = assign_response['id']
 
 print("=== 7. GET /assignments/current ===")
-status, current = make_request("GET", "/assignments/current")
+status, current = make_request("GET", "/assignments/current", token=token)
 current_assignment = next((a for a in current if a['id'] == assignment_id), None)
 print(f"Status: {status}")
 print(f"Found current assignment: {json.dumps(current_assignment, indent=2)}\n")
@@ -108,7 +108,7 @@ status, return_resp = make_request("POST", f"/assignments/{assignment_id}/return
 print(f"Status: {status}\nResponse: {json.dumps(return_resp, indent=2)}\n")
 
 print("=== 9. GET /assignments/history ===")
-status, history = make_request("GET", "/assignments/history")
+status, history = make_request("GET", "/assignments/history", token=token)
 history_assignment = next((a for a in history if a['id'] == assignment_id), None)
 print(f"Status: {status}")
 print(f"Found history assignment: {json.dumps(history_assignment, indent=2)}\n")

@@ -19,5 +19,5 @@ ENV PYTHONPATH=/app
 ENV MODULE_NAME=backend.main
 ENV VARIABLE_NAME=app
 
-# Command to run the application using Gunicorn
-CMD ["gunicorn", "-c", "backend/gunicorn_conf.py", "backend.main:app"]
+# Command to run database migrations and start the application using Gunicorn
+CMD ["sh", "-c", "alembic upgrade head && gunicorn -c backend/gunicorn_conf.py backend.main:app"]

@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import PressableScale from '../components/PressableScale';
 import { login, setAuthToken } from '../services/api';
 import { Feather } from '@expo/vector-icons';
+import { useExitAppOnBack } from '../hooks/useExitAppOnBack';
 
 export default function Login({ navigation }: any) {
   const [adminId, setAdminId] = useState('');
@@ -19,6 +20,8 @@ export default function Login({ navigation }: any) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  useExitAppOnBack();
 
   const handleLogin = async () => {
     if (!adminId || !accessCode) {

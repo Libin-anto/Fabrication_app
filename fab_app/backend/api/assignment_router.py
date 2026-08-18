@@ -24,17 +24,17 @@ class LocationUpdate(BaseModel):
     location: str
 
 @router.patch("/{id}/location", response_model=AssignmentResponse)
-def update_location(id: int, data: LocationUpdate, db: Session = Depends(get_db)):
+def update_location(id: int, data: LocationUpdate, db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     svc = AssignmentService(db)
     return svc.update_location(id, data.location)
 
 @router.get("/current", response_model=List[AssignmentDetailResponse])
-def get_current(db: Session = Depends(get_db)):
+def get_current(db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     svc = AssignmentService(db)
     return svc.get_current()
 
 @router.get("/history", response_model=List[AssignmentDetailResponse])
-def get_history(db: Session = Depends(get_db)):
+def get_history(db: Session = Depends(get_db), admin: Admin = Depends(get_current_admin)):
     svc = AssignmentService(db)
     return svc.get_history()
 
