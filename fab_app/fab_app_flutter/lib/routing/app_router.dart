@@ -31,9 +31,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       if (isSplash) return null; // Splash screen handles its own navigation after animation
 
-      // If auth state is still loading and we are not on splash, redirect to splash
-      if (authState.isLoading) return '/splash';
-
       final isAuthenticated = authState.value ?? false;
 
       if (!isAuthenticated && !isLoggingIn && !isRegistering) return '/login';
