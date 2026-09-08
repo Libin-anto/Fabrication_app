@@ -40,20 +40,17 @@ class AuthService {
     }
   }
 
-  Future<void> register(String username, String password, String adminKey, {String? name}) async {
+  Future<void> register(String username, String password, {String? name}) async {
     try {
       await _dio.post('/auth/register', data: {
         'username': username,
         'password': password,
-        'admin_key': adminKey,
         'name': name,
       });
       // Optionally login automatically after register, but based on RN we just return success
     } on DioException catch (e) {
       if (e.response?.statusCode == 400) {
         throw Exception(e.response?.data['detail'] ?? 'Registration failed.');
-      } else if (e.response?.statusCode == 403) {
-        throw Exception('Forbidden: Invalid admin registration key.');
       } else if (e.response?.statusCode == 422) {
         throw Exception('Validation Error: Please check your input format.');
       }

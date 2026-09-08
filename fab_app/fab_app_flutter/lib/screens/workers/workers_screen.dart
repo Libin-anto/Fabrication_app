@@ -185,6 +185,7 @@ class _WorkersScreenState extends ConsumerState<WorkersScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () => context.push('/workers/add'),
         child: const Icon(Icons.add),
       ),

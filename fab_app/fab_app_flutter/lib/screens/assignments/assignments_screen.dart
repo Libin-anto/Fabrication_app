@@ -38,6 +38,7 @@ class AssignmentsScreen extends StatelessWidget {
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
+          heroTag: null,
           onPressed: () => context.push('/assignments/new'),
           icon: const Icon(Icons.add),
           label: const Text('Assign Tool'),

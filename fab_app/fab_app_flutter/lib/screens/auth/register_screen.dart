@@ -14,19 +14,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _usernameController = TextEditingController();
   final _userIdController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _adminKeyController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
   bool _obscurePassword = true;
-  bool _obscureAdminKey = true;
 
   @override
   void dispose() {
     _usernameController.dispose();
     _userIdController.dispose();
     _passwordController.dispose();
-    _adminKeyController.dispose();
     super.dispose();
   }
 
@@ -42,7 +39,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       await ref.read(authStateProvider.notifier).register(
         _userIdController.text.trim(),
         _passwordController.text,
-        _adminKeyController.text.trim(),
         name: _usernameController.text.trim(),
       );
       // After registration, show success and go to login
@@ -153,30 +149,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     obscureText: _obscurePassword,
                     validator: (value) =>
                         value == null || value.isEmpty ? 'Please enter password' : null,
-                    enabled: !_isLoading,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _adminKeyController,
-                    decoration: InputDecoration(
-                      hintText: 'admin key',
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.vpn_key),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureAdminKey ? Icons.visibility_off : Icons.visibility,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureAdminKey = !_obscureAdminKey;
-                          });
-                        },
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                    ),
-                    obscureText: _obscureAdminKey,
-                    validator: (value) =>
-                        value == null || value.isEmpty ? 'Please enter admin key' : null,
                     enabled: !_isLoading,
                   ),
                   const SizedBox(height: 32),

@@ -3,7 +3,7 @@ import urllib.error
 import json
 import sys
 
-BASE_URL = "https://fabrication-app.onrender.com"
+BASE_URL = "http://127.0.0.1:8000"
 
 def print_curl(method, endpoint, json_data=None):
     url = f"{BASE_URL}{endpoint}"
@@ -56,7 +56,7 @@ worker_data = {
     "worker_id": "TW-999",
     "role": "Helper",
     "is_active": True,
-    "box_id": 1
+    "box_id": 3
 }
 res_c = run_step("c. POST /workers/", "POST", "/workers/", worker_data)
 worker_db_id = res_c.get("id")

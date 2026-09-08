@@ -1,0 +1,101 @@
+=== WORKERS ===
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/workers/
+RESPONSE: 200
+BODY: []
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/workers/
+BODY: {"name": "Test Worker", "worker_id": "TW-1787908067", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 400
+BODY: {"detail":"Box ID 1 does not exist."}
+
+=== MACHINES ===
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/machines/
+RESPONSE: 200
+BODY: []
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/machines/
+BODY: {"name": "Test Machine", "machine_id": "TM-1787908067", "machine_number": "SN-1787908067", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 201
+BODY: {"machine_id":"TM-1787908067","machine_number":"SN-1787908067","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":8}
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/machines/8
+RESPONSE: 200
+BODY: {"machine_id":"TM-1787908067","machine_number":"SN-1787908067","name":"Test Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":8}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/machines/
+BODY: {"name": "Dup Machine", "machine_id": "TM-1787908067", "machine_number": "SN-17879080672", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 400
+BODY: {"detail":"Machine ID TM-1787908067 is already in use."}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/machines/
+BODY: {"name": "", "machine_id": "TM2-1787908067", "machine_number": "SN-17879080673", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 400
+BODY: {"detail":"Name cannot be empty."}
+--------------------------------------------------
+REQUEST: PUT http://127.0.0.1:8000/machines/8
+BODY: {"name": "Updated Machine", "machine_id": "TM-1787908067", "machine_number": "SN-1787908067", "category": "Saw", "status": "Available", "is_active": true}
+RESPONSE: 200
+BODY: {"machine_id":"TM-1787908067","machine_number":"SN-1787908067","name":"Updated Machine","category":"Saw","status":"Available","remarks":null,"is_active":true,"id":8}
+
+=== ASSIGNMENTS ===
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/workers/
+BODY: {"name": "Assign Worker", "worker_id": "AW-1787908067", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 400
+BODY: {"detail":"Box ID 1 does not exist."}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/machines/
+BODY: {"name": "Assign Machine", "machine_id": "AM-1787908067", "machine_number": "SNA-1787908067", "category": "Drill", "status": "Available", "is_active": true}
+RESPONSE: 201
+BODY: {"machine_id":"AM-1787908067","machine_number":"SNA-1787908067","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":9}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/assignments/assign
+BODY: {"worker_id": null, "machine_id": 9, "location": "On Site"}
+RESPONSE: 422
+BODY: {"detail":[{"type":"int_type","loc":["body","worker_id"],"msg":"Input should be a valid integer","input":null}]}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/workers/
+BODY: {"name": "Worker 3", "worker_id": "W3-1787908067", "role": "Fabricator", "box_id": 1, "is_active": true}
+RESPONSE: 400
+BODY: {"detail":"Box ID 1 does not exist."}
+--------------------------------------------------
+REQUEST: POST http://127.0.0.1:8000/assignments/assign
+BODY: {"worker_id": null, "machine_id": 9, "location": "On Site"}
+RESPONSE: 422
+BODY: {"detail":[{"type":"int_type","loc":["body","worker_id"],"msg":"Input should be a valid integer","input":null}]}
+--------------------------------------------------
+REQUEST: PATCH http://127.0.0.1:8000/machines/9/status
+BODY: {"status": "Available"}
+RESPONSE: 200
+BODY: {"machine_id":"AM-1787908067","machine_number":"SNA-1787908067","name":"Assign Machine","category":"Drill","status":"Available","remarks":null,"is_active":true,"id":9}
+--------------------------------------------------
+REQUEST: PATCH http://127.0.0.1:8000/machines/9/status
+BODY: {"status": "Broken"}
+RESPONSE: 422
+BODY: {"detail":[{"type":"literal_error","loc":["body","status"],"msg":"Input should be 'Available', 'Assigned' or 'Under Repair'","input":"Broken","ctx":{"expected":"'Available', 'Assigned' or 'Under Repair'"}}]}
+--------------------------------------------------
+REQUEST: DELETE http://127.0.0.1:8000/workers/None
+RESPONSE: 422
+BODY: {"detail":[{"type":"int_parsing","loc":["path","id"],"msg":"Input should be a valid integer, unable to parse string as an integer","input":"None"}]}
+--------------------------------------------------
+REQUEST: DELETE http://127.0.0.1:8000/machines/9
+RESPONSE: 200
+BODY: {"message":"Machine deactivated"}
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/assignments/current
+RESPONSE: 200
+BODY: []
+
+=== DASHBOARD ===
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/dashboard/stats
+RESPONSE: 200
+BODY: {"total_workers":0,"total_machines":1,"available":1,"assigned":0,"under_repair":0}
+
+=== SEARCH ===
+--------------------------------------------------
+REQUEST: GET http://127.0.0.1:8000/search/?q=Assign
+RESPONSE: 200
+BODY: []

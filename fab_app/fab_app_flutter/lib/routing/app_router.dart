@@ -14,21 +14,25 @@ import '../screens/machines/machines_screen.dart';
 import '../screens/machines/machine_form_screen.dart';
 import '../screens/assignments/assignments_screen.dart';
 import '../screens/assignments/assign_tool_screen.dart';
+import '../screens/splash/splash_screen.dart';
 import '../providers/auth_provider.dart';
 import 'main_scaffold.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
-    initialLocation: '/dashboard',
+    initialLocation: '/splash',
     redirect: (context, state) {
       final isLoggingIn = state.matchedLocation == '/login';
       final isRegistering = state.matchedLocation == '/register';
+      final isSplash = state.matchedLocation == '/splash';
       
       final authState = ref.read(authStateProvider);
 
-      // If auth state is still loading, wait
-      if (authState.isLoading) return null;
+      if (isSplash) return null; // Splash screen handles its own navigation after animation
+
+      // If auth state is still loading and we are not on splash, redirect to splash
+      if (authState.isLoading) return '/splash';
 
       final isAuthenticated = authState.value ?? false;
 
@@ -38,6 +42,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),

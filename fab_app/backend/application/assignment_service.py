@@ -6,7 +6,7 @@ from sqlalchemy import text
 from datetime import datetime
 from backend.infrastructure.assignment_repository import AssignmentRepository
 from backend.application.machine_service import MachineService
-from backend.domain.models import Assignment, Machine
+from backend.domain.models import Assignment, Machine, Worker
 from fastapi import HTTPException
 
 
@@ -42,11 +42,20 @@ class AssignmentService:
                 raise HTTPException(status_code=404, detail="Machine not found")
 
             # ── Business rules ────────────────────────────────────────────────
+            if not machine.is_active:
+                raise HTTPException(status_code=400, detail="Cannot assign a deactivated machine.")
+
             if machine.status != "Available":
                 raise HTTPException(
                     status_code=409,
                     detail=f"Machine is currently '{machine.status}' and cannot be assigned."
                 )
+
+            worker = self.db.query(Worker).filter(Worker.id == worker_id).first()
+            if not worker:
+                raise HTTPException(status_code=404, detail="Worker not found")
+            if not worker.is_active:
+                raise HTTPException(status_code=400, detail="Cannot assign machine to a deactivated worker.")
 
             # Verify worker is not already holding another machine
             active_assignment = self.repo.find_active_by_worker(worker_id)

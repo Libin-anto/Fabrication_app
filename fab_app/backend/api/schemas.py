@@ -9,7 +9,6 @@ class AdminBase(BaseModel):
 
 class AdminCreate(AdminBase):
     password: str
-    admin_key: str  # Required — validated server-side against ADMIN_REGISTRATION_KEY env var
     name: Optional[str] = None
 
 class AdminLogin(AdminBase):

@@ -199,7 +199,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                       obscureText: _obscurePassword,
                       readOnly: true,
-                      enabled: false,
                     ),
                     const SizedBox(height: 16),
                     TextField(

@@ -25,22 +25,7 @@ def get_current_admin(token: str = Depends(oauth2_scheme), db: Session = Depends
 def register(admin_in: AdminCreate, db: Session = Depends(get_db)):
     """
     Register a new administrator account.
-    Requires a valid ADMIN_REGISTRATION_KEY set as an environment variable on the server.
-    This key must be provided in the request — it is never hardcoded in the application.
     """
-    # Validate the registration key against the server-side environment variable
-    registration_key = os.getenv("ADMIN_REGISTRATION_KEY")
-    if not registration_key:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Admin registration is currently disabled. Contact the system administrator."
-        )
-    if admin_in.admin_key != registration_key:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Invalid admin registration key."
-        )
-
     if not admin_in.username or not admin_in.username.strip():
         raise HTTPException(status_code=400, detail="Username cannot be empty")
 

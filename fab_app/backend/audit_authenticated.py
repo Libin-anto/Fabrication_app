@@ -66,13 +66,13 @@ ts = str(int(time.time()))
 # 1. Workers
 log_lines.append("=== WORKERS ===")
 log_req_res("GET", f"{BASE_URL}/workers/")
-status, w_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Test Worker", "worker_id": f"TW-{ts}", "role": "Fabricator", "box_id": 1, "is_active": True})
+status, w_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Test Worker", "worker_id": f"TW-{ts}", "role": "Fabricator", "box_id": 3, "is_active": True})
 if status in (200, 201) and w_res:
     w_id = w_res.get("id")
     log_req_res("GET", f"{BASE_URL}/workers/{w_id}")
-    log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Duplicate Worker", "worker_id": f"TW-{ts}", "role": "Helper", "box_id": 1, "is_active": True})
-    log_req_res("POST", f"{BASE_URL}/workers/", {"name": "", "worker_id": f"TW2-{ts}", "role": "Helper", "box_id": 1, "is_active": True})
-    log_req_res("PUT", f"{BASE_URL}/workers/{w_id}", {"name": "Updated Worker", "worker_id": f"TW-{ts}", "role": "Fabricator", "box_id": 1, "is_active": True})
+    log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Duplicate Worker", "worker_id": f"TW-{ts}", "role": "Helper", "box_id": 3, "is_active": True})
+    log_req_res("POST", f"{BASE_URL}/workers/", {"name": "", "worker_id": f"TW2-{ts}", "role": "Helper", "box_id": 3, "is_active": True})
+    log_req_res("PUT", f"{BASE_URL}/workers/{w_id}", {"name": "Updated Worker", "worker_id": f"TW-{ts}", "role": "Fabricator", "box_id": 3, "is_active": True})
     # We will test soft-delete later after assignments testing to ensure we check deactivation protection
 
 # 2. Machines
@@ -88,7 +88,7 @@ if status in (200, 201) and m_res:
 
 # 3. Assignments
 log_lines.append("\n=== ASSIGNMENTS ===")
-_, w_assign_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Assign Worker", "worker_id": f"AW-{ts}", "role": "Fabricator", "box_id": 1, "is_active": True})
+_, w_assign_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Assign Worker", "worker_id": f"AW-{ts}", "role": "Fabricator", "box_id": 3, "is_active": True})
 _, m_assign_res = log_req_res("POST", f"{BASE_URL}/machines/", {"name": "Assign Machine", "machine_id": f"AM-{ts}", "machine_number": f"SNA-{ts}", "category": "Drill", "status": "Available", "is_active": True})
 
 if w_assign_res and m_assign_res:
@@ -99,7 +99,7 @@ if w_assign_res and m_assign_res:
     status_assign, a_res = log_req_res("POST", f"{BASE_URL}/assignments/assign", {"worker_id": w_id2, "machine_id": m_id2, "location": "On Site"})
     
     # Try concurrent/duplicate assignment on same machine (should return 409 Conflict)
-    _, w3_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Worker 3", "worker_id": f"W3-{ts}", "role": "Fabricator", "box_id": 1, "is_active": True})
+    _, w3_res = log_req_res("POST", f"{BASE_URL}/workers/", {"name": "Worker 3", "worker_id": f"W3-{ts}", "role": "Fabricator", "box_id": 3, "is_active": True})
     if w3_res:
         w3_id = w3_res.get("id")
         log_req_res("POST", f"{BASE_URL}/assignments/assign", {"worker_id": w3_id, "machine_id": m_id2, "location": "On Site"})

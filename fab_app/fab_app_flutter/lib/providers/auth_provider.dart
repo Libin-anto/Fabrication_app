@@ -12,18 +12,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<bool>> {
   final AuthService _authService;
   final SecureStorageService _secureStorage;
 
-  AuthNotifier(this._authService, this._secureStorage) : super(const AsyncValue.loading()) {
-    _clearSessionOnStartup();
-  }
-
-  Future<void> _clearSessionOnStartup() async {
-    try {
-      // Clear token on start to guarantee cold starts begin at the login screen
-      await _secureStorage.deleteToken();
-      state = const AsyncValue.data(false);
-    } catch (_) {
-      state = const AsyncValue.data(false);
-    }
+  AuthNotifier(this._authService, this._secureStorage) : super(const AsyncValue.data(false)) {
+    _secureStorage.deleteToken().catchError((_) {});
   }
 
   Future<void> login(String username, String password) async {
@@ -42,10 +32,10 @@ class AuthNotifier extends StateNotifier<AsyncValue<bool>> {
     }
   }
 
-  Future<void> register(String username, String password, String adminKey, {String? name}) async {
+  Future<void> register(String username, String password, {String? name}) async {
     state = const AsyncValue.loading();
     try {
-      await _authService.register(username, password, adminKey, name: name);
+      await _authService.register(username, password, name: name);
       state = const AsyncValue.data(false); // Stay unauthenticated, let user log in manually after success
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);

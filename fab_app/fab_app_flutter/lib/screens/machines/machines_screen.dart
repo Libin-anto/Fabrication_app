@@ -221,6 +221,7 @@ class _MachinesScreenState extends ConsumerState<MachinesScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         onPressed: () => context.push('/machines/add'),
         child: const Icon(Icons.add),
       ),

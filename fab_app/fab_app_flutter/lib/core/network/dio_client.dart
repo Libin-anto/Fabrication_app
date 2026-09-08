@@ -6,11 +6,8 @@ final dioProvider = Provider<Dio>((ref) {
   final secureStorage = ref.watch(secureStorageServiceProvider);
   final dio = Dio();
 
-  // Load Base URL from compile-time environment and enforce it
-  const baseUrl = String.fromEnvironment('API_URL');
-  if (baseUrl.isEmpty) {
-    throw Exception('CONFIGURATION ERROR: API_URL environment variable is missing.');
-  }
+  // Load Base URL from compile-time environment, default to Android emulator localhost
+  const baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://10.0.2.2:8000');
   
   dio.options.baseUrl = baseUrl;
   dio.options.connectTimeout = const Duration(seconds: 30);
