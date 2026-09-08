@@ -20,4 +20,4 @@ ENV MODULE_NAME=backend.main
 ENV VARIABLE_NAME=app
 
 # Command to run database migrations and start the application using Gunicorn
-CMD ["sh", "-c", "alembic upgrade head && gunicorn -c backend/gunicorn_conf.py backend.main:app"]
+CMD ["sh", "-c", "cd backend && alembic upgrade head && cd .. && gunicorn -c backend/gunicorn_conf.py backend.main:app"]
