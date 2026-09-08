@@ -54,6 +54,10 @@ class WorkerService {
       if (e.response?.statusCode == 422) {
         return Exception('Validation Error: Invalid data format.');
       }
+      final detail = e.response?.data?['detail'];
+      if (detail != null && detail is String) {
+        return Exception(detail);
+      }
       return Exception('Network error: Failed to communicate with server.');
     }
     return Exception('An unexpected error occurred.');

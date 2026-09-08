@@ -19,6 +19,7 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
   bool _isLoading = false;
 
   late final TextEditingController _nameController;
+  late final TextEditingController _machineIdController;
   late final TextEditingController _machineNumberController;
   late final TextEditingController _categoryController;
   late final TextEditingController _remarksController;
@@ -31,6 +32,7 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.machine?.name ?? '');
+    _machineIdController = TextEditingController(text: widget.machine?.machineId ?? '');
     _machineNumberController = TextEditingController(text: widget.machine?.machineNumber ?? '');
     _categoryController = TextEditingController(text: widget.machine?.category ?? '');
     _remarksController = TextEditingController(text: widget.machine?.remarks ?? '');
@@ -46,6 +48,7 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _machineIdController.dispose();
     _machineNumberController.dispose();
     _categoryController.dispose();
     _remarksController.dispose();
@@ -59,6 +62,7 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
 
     final data = {
       'name': _nameController.text.trim(),
+      'machine_id': _machineIdController.text.trim(),
       'machine_number': _machineNumberController.text.trim(),
       'category': _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
       'status': _status,
@@ -130,9 +134,20 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: _machineIdController,
+                decoration: const InputDecoration(
+                  labelText: 'Machine ID (e.g. M-001)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.qr_code),
+                ),
+                validator: (val) => val == null || val.isEmpty ? 'Required field' : null,
+                enabled: !_isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _machineNumberController,
                 decoration: const InputDecoration(
-                  labelText: 'Machine Number (e.g. M-001)',
+                  labelText: 'Machine Number (Serial)',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.numbers),
                 ),
