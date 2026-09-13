@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 from backend.api import worker_router, machine_router, assignment_router, search_router, dashboard_router, auth_router
+from backend.infrastructure.database import get_db
 
 app = FastAPI(title="Meerash Fab App API")
 
@@ -36,3 +38,33 @@ def root():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+
+@app.get("/seed")
+def seed_database(db: Session = Depends(get_db)):
+    from backend.domain.models import Floor, Mestri, Box
+    
+    # Check if we already have boxes
+    existing = db.query(Box).first()
+    if existing:
+        return {"message": "Database already seeded."}
+        
+    # Create Floor 1
+    floor = Floor(name="Floor 1")
+    db.add(floor)
+    db.commit()
+    db.refresh(floor)
+    
+    # Create Mestri 1
+    mestri = Mestri(name="Default Mestri", floor_id=floor.id)
+    db.add(mestri)
+    db.commit()
+    db.refresh(mestri)
+    
+    # Create Boxes 1-10
+    for i in range(1, 11):
+        box = Box(id=i, name=f"Box {i}", mestri_id=mestri.id)
+        db.add(box)
+        
+    db.commit()
+    
+    return {"message": "Seeded Floor 1, Default Mestri, and Boxes 1-10 successfully!"}
