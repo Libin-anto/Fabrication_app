@@ -63,7 +63,7 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
     final data = {
       'name': _nameController.text.trim(),
       'machine_id': _machineIdController.text.trim(),
-      'machine_number': _machineNumberController.text.trim(),
+      'machine_number': _machineNumberController.text.trim().isEmpty ? null : _machineNumberController.text.trim(),
       'category': _categoryController.text.trim().isEmpty ? null : _categoryController.text.trim(),
       'status': _status,
       'remarks': _remarksController.text.trim().isEmpty ? null : _remarksController.text.trim(),
@@ -147,11 +147,10 @@ class _MachineFormScreenState extends ConsumerState<MachineFormScreen> {
               TextFormField(
                 controller: _machineNumberController,
                 decoration: const InputDecoration(
-                  labelText: 'Machine Number (Serial)',
+                  labelText: 'Machine Number (Serial) (Optional)',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.numbers),
                 ),
-                validator: (val) => val == null || val.isEmpty ? 'Required field' : null,
                 enabled: !_isLoading,
               ),
               const SizedBox(height: 16),

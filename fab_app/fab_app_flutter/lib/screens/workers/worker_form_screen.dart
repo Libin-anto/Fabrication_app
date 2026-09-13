@@ -22,6 +22,7 @@ class _WorkerFormScreenState extends ConsumerState<WorkerFormScreen> {
   late final TextEditingController _workerIdController;
   late final TextEditingController _roleController;
   late final TextEditingController _boxIdController;
+  late final TextEditingController _floorController;
   bool _isActive = true;
 
   @override
@@ -30,7 +31,8 @@ class _WorkerFormScreenState extends ConsumerState<WorkerFormScreen> {
     _nameController = TextEditingController(text: widget.worker?.name ?? '');
     _workerIdController = TextEditingController(text: widget.worker?.workerId ?? '');
     _roleController = TextEditingController(text: widget.worker?.role ?? '');
-    _boxIdController = TextEditingController(text: widget.worker?.boxId.toString() ?? '');
+    _boxIdController = TextEditingController(text: widget.worker?.boxId?.toString() ?? '');
+    _floorController = TextEditingController(text: widget.worker?.floor ?? '');
     _isActive = widget.worker?.isActive ?? true;
   }
 
@@ -40,6 +42,7 @@ class _WorkerFormScreenState extends ConsumerState<WorkerFormScreen> {
     _workerIdController.dispose();
     _roleController.dispose();
     _boxIdController.dispose();
+    _floorController.dispose();
     super.dispose();
   }
 
@@ -52,7 +55,8 @@ class _WorkerFormScreenState extends ConsumerState<WorkerFormScreen> {
       'name': _nameController.text.trim(),
       'worker_id': _workerIdController.text.trim(),
       'role': _roleController.text.trim(),
-      'box_id': int.tryParse(_boxIdController.text.trim()) ?? 0,
+      'box_id': int.tryParse(_boxIdController.text.trim()),
+      'floor': _floorController.text.trim().isEmpty ? null : _floorController.text.trim(),
       'is_active': _isActive,
     };
 
@@ -141,16 +145,27 @@ class _WorkerFormScreenState extends ConsumerState<WorkerFormScreen> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: _floorController,
+                decoration: const InputDecoration(
+                  labelText: 'Floor (Optional)',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.layers),
+                ),
+                enabled: !_isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _boxIdController,
                 decoration: const InputDecoration(
-                  labelText: 'Box ID',
+                  labelText: 'Box ID (Optional)',
                   border: OutlineInputBorder(),
                   prefixIcon: Icon(Icons.inventory_2),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (val) {
-                  if (val == null || val.isEmpty) return 'Required field';
-                  if (int.tryParse(val) == null) return 'Must be a valid integer';
+                  if (val != null && val.isNotEmpty && int.tryParse(val) == null) {
+                    return 'Must be a valid integer';
+                  }
                   return null;
                 },
                 enabled: !_isLoading,

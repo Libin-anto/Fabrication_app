@@ -4,7 +4,8 @@ class Worker {
   final String workerId;
   final String role;
   final bool isActive;
-  final int boxId;
+  final int? boxId;
+  final String? floor;
 
   Worker({
     required this.id,
@@ -12,7 +13,8 @@ class Worker {
     required this.workerId,
     required this.role,
     required this.isActive,
-    required this.boxId,
+    this.boxId,
+    this.floor,
   });
 
   factory Worker.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Worker {
       role: json['role'],
       isActive: json['is_active'] ?? true,
       boxId: json['box_id'],
+      floor: json['floor'],
     );
   }
 
@@ -34,6 +37,7 @@ class Worker {
       'role': role,
       'is_active': isActive,
       'box_id': boxId,
+      'floor': floor,
     };
   }
 }

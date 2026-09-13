@@ -1,7 +1,7 @@
 class Machine {
   final int id;
   final String machineId;
-  final String machineNumber;
+  final String? machineNumber;
   final String name;
   final String? category;
   final String status;
@@ -11,7 +11,7 @@ class Machine {
   Machine({
     required this.id,
     required this.machineId,
-    required this.machineNumber,
+    this.machineNumber,
     required this.name,
     this.category,
     required this.status,
