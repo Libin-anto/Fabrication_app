@@ -6,14 +6,20 @@ final dioProvider = Provider<Dio>((ref) {
   final secureStorage = ref.watch(secureStorageServiceProvider);
   final dio = Dio();
 
-  // Load Base URL from compile-time environment, default to Android emulator localhost
-  const baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://10.0.2.2:8000');
-  
-  dio.options.baseUrl = baseUrl;
-  dio.options.connectTimeout = const Duration(seconds: 30);
-  dio.options.receiveTimeout = const Duration(seconds: 30);
+  // Production backend on Render (free tier can take 50s+ to cold-start)
+  const baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'https://fabrication-app.onrender.com',
+  );
 
-  // Add Auth Interceptor
+  dio.options.baseUrl = baseUrl;
+  // Render free tier spins down after inactivity and can take 50s+ to cold start.
+  // We set timeouts well above that so the first request after idle always succeeds.
+  dio.options.connectTimeout = const Duration(seconds: 90);
+  dio.options.receiveTimeout = const Duration(seconds: 90);
+  dio.options.sendTimeout = const Duration(seconds: 90);
+
+  // Auth interceptor — attaches Bearer token and retries once on timeout
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
       final token = await secureStorage.getToken();
@@ -22,11 +28,31 @@ final dioProvider = Provider<Dio>((ref) {
       }
       return handler.next(options);
     },
-    onError: (DioException error, handler) {
-      // We can handle global 401s or 422s here if needed
+    onError: (DioException error, handler) async {
+      // On connect/receive timeout, retry once automatically (handles cold starts)
+      if (error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.type == DioExceptionType.sendTimeout) {
+        try {
+          final opts = error.requestOptions;
+          final token = await secureStorage.getToken();
+          final retryResponse = await dio.fetch(
+            opts.copyWith(
+              headers: {
+                ...opts.headers,
+                if (token != null) 'Authorization': 'Bearer $token',
+              },
+            ),
+          );
+          return handler.resolve(retryResponse);
+        } catch (_) {
+          // If retry also fails, pass the original error through
+        }
+      }
       return handler.next(error);
     },
   ));
 
   return dio;
 });
+

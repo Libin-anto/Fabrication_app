@@ -69,6 +69,11 @@ class AssignmentService {
 
   Exception _handleError(dynamic e) {
     if (e is DioException) {
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        return Exception('Server is taking too long to respond. Please try again in a moment.');
+      }
       if (e.response?.statusCode == 422) {
         return Exception('Validation Error: Invalid data format.');
       }
