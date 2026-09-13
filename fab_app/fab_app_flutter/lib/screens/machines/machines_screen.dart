@@ -128,7 +128,7 @@ class _MachinesScreenState extends ConsumerState<MachinesScreen> {
           data: (machines) {
             final filtered = machines.where((m) {
               return m.name.toLowerCase().contains(_searchQuery) ||
-                     m.machineNumber.toLowerCase().contains(_searchQuery) ||
+                     (m.machineNumber?.toLowerCase() ?? '').contains(_searchQuery) ||
                      (m.category?.toLowerCase() ?? '').contains(_searchQuery) ||
                      m.status.toLowerCase().contains(_searchQuery);
             }).toList();
