@@ -68,3 +68,19 @@ def seed_database(db: Session = Depends(get_db)):
     db.commit()
     
     return {"message": "Seeded Floor 1, Default Mestri, and Boxes 1-10 successfully!"}
+
+@app.get("/reset_all_data")
+def reset_all_data(db: Session = Depends(get_db)):
+    from backend.domain.models import Assignment, Worker, Machine, Box, Mestri, Floor
+    
+    # Delete in correct order to respect foreign keys
+    db.query(Assignment).delete()
+    db.query(Worker).delete()
+    db.query(Machine).delete()
+    db.query(Box).delete()
+    db.query(Mestri).delete()
+    db.query(Floor).delete()
+    
+    db.commit()
+    return {"message": "Database wiped successfully! It is now completely fresh."}
+
