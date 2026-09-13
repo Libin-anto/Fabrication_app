@@ -67,19 +67,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _fDrop = Tween<double>(begin: -80, end: 0).animate(
       CurvedAnimation(
         parent: _mainCtrl,
-        curve: const Interval(0.22, 0.40, curve: Curves.easeOutBounce),
+        curve: const Interval(0.22, 0.40, curve: Curves.bounceOut),
       ),
     );
     _aDrop = Tween<double>(begin: -80, end: 0).animate(
       CurvedAnimation(
         parent: _mainCtrl,
-        curve: const Interval(0.27, 0.45, curve: Curves.easeOutBounce),
+        curve: const Interval(0.27, 0.45, curve: Curves.bounceOut),
       ),
     );
     _bDrop = Tween<double>(begin: -80, end: 0).animate(
       CurvedAnimation(
         parent: _mainCtrl,
-        curve: const Interval(0.32, 0.50, curve: Curves.easeOutBounce),
+        curve: const Interval(0.32, 0.50, curve: Curves.bounceOut),
       ),
     );
 
