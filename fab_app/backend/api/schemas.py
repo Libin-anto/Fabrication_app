@@ -82,7 +82,8 @@ class WorkerBase(BaseModel):
     worker_id: str
     role: str  # Fabricator | Helper
     is_active: Optional[bool] = True
-    box_id: int
+    box_id: Optional[int] = None
+    floor: Optional[str] = None
 
 class WorkerCreate(WorkerBase):
     pass
@@ -93,6 +94,7 @@ class WorkerUpdate(WorkerBase):
     role: Optional[str] = None
     is_active: Optional[bool] = None
     box_id: Optional[int] = None
+    floor: Optional[str] = None
 
 class WorkerResponse(WorkerBase):
     id: int
@@ -106,7 +108,7 @@ MachineStatusLiteral = Literal["Available", "Assigned", "Under Repair"]
 
 class MachineBase(BaseModel):
     machine_id: str
-    machine_number: str
+    machine_number: Optional[str] = None
     name: str
     category: Optional[str] = None
     status: MachineStatusLiteral

@@ -34,7 +34,8 @@ class Box(Base):
 class Worker(Base):
     __tablename__ = 'workers'
     id = Column(Integer, primary_key=True)
-    box_id = Column(Integer, ForeignKey('boxes.id'), nullable=False)
+    box_id = Column(Integer, nullable=True)
+    floor = Column(String, nullable=True)
     name = Column(String, nullable=False)
     worker_id = Column(String, unique=True, nullable=False)
     role = Column(String, nullable=False) # Fabricator/Helper
@@ -44,7 +45,7 @@ class Machine(Base):
     __tablename__ = 'machines'
     id = Column(Integer, primary_key=True)
     machine_id = Column(String, unique=True, nullable=False)
-    machine_number = Column(String, nullable=False)
+    machine_number = Column(String, nullable=True)
     name = Column(String, nullable=False)
     category = Column(String)
     status = Column(String, nullable=False) # Available/Assigned/Under Repair
