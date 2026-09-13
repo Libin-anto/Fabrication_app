@@ -13,7 +13,15 @@ class AuthNotifier extends StateNotifier<AsyncValue<bool>> {
   final SecureStorageService _secureStorage;
 
   AuthNotifier(this._authService, this._secureStorage) : super(const AsyncValue.data(false)) {
-    _secureStorage.deleteToken().catchError((_) {});
+    // Check if there's already a stored token and mark as authenticated
+    _checkExistingAuth();
+  }
+
+  Future<void> _checkExistingAuth() async {
+    final token = await _secureStorage.getToken();
+    if (token != null && mounted) {
+      state = const AsyncValue.data(true);
+    }
   }
 
   Future<void> login(String username, String password) async {

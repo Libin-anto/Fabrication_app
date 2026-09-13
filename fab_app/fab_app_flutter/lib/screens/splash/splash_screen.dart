@@ -39,15 +39,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
 
   void _checkAuthAndNavigate() {
     final authState = ref.read(authStateProvider);
-    if (authState.isLoading) {
-      // If auth is still loading after the animation, wait for it
+    // If still in initial loading or async token check is in progress, listen for changes
+    if (authState.isLoading || authState.value == false) {
+      // Listen for one state change — covers: loading→true (token found), loading→false (no token), or already-false→navigate
       ref.listenManual(authStateProvider, (previous, next) {
-        if (!next.isLoading) {
-          if (mounted) {
-            context.go(next.value == true ? '/dashboard' : '/login');
-          }
+        if (!next.isLoading && mounted) {
+          context.go(next.value == true ? '/dashboard' : '/login');
         }
-      });
+      }, fireImmediately: true);
     } else {
       if (mounted) {
         context.go(authState.value == true ? '/dashboard' : '/login');

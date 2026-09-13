@@ -15,11 +15,11 @@ class AssignmentsScreen extends StatelessWidget {
           title: const Text('Assignments'),
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          bottom: const TabBar(
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            indicatorColor: Colors.white,
-            tabs: [
+          bottom: TabBar(
+            labelColor: Theme.of(context).colorScheme.onPrimary,
+            unselectedLabelColor: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.6),
+            indicatorColor: Theme.of(context).colorScheme.onPrimary,
+            tabs: const [
               Tab(text: 'Current'),
               Tab(text: 'History'),
             ],
